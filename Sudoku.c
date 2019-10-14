@@ -1,12 +1,4 @@
-
-// to do czy wskazniki czy tablica wielowymiarowa
-// wczytywanie z pliku
-// struktury
-// enum i typedef  - stan gry
-// cos wiecej niz jeden malloc h
-// wywal getchar
-
-//p.linczuk@elka.pw.edu.pl
+//Michal Tulowiecki
 
 #include <stdio.h>
 #include <stdlib.h>
