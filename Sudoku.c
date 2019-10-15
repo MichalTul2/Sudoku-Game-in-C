@@ -85,6 +85,7 @@ char *printCell(column, row)
         return " ";
     int length = snprintf(NULL, 0, "%d", userBoard[column][row]);
     char *string = malloc(length + 1);
+    if (string == NULL) exit(EXIT_FAILURE);
     snprintf(string, length + 1, "%d", userBoard[column][row]);
     return string;
 }
@@ -182,7 +183,7 @@ void guess(void)
     {
         game.turn++;
         printBoard();
-        printf("DONT LIE! YOU CAN SEE THAT\n\n");
+        printf("DONT LIE! YOU CAN SEE THAT\n");
 
         return;
     }
@@ -198,7 +199,7 @@ void guess(void)
         game.turn++;
         game.hearts--;
         printBoard();
-        printf("TRY AGAIN\n\n");
+        printf("TRY AGAIN\n");
     }
 }
 
@@ -235,8 +236,8 @@ void loadMenu(void)
     printf("Menu\n");
     printf("1. HINT\n");
     printf("2. GUESS\n");
-    printf("3. EXIT\n\n");
-    printf("YOUR CHOICE: ");
+    printf("3. EXIT\n");
+    printf("YOUR CHOICE:");
     scanf("%d", &choice);
     switch (choice)
     {
@@ -282,6 +283,7 @@ void chooseLevel(void)
     printf("1. EASY\n");
     printf("2. MEDIUM\n");
     printf("3. HARD\n");
+    printf("YOUR CHOICE:");
     scanf("%d", &choice);
     switch (choice)
     {
@@ -347,21 +349,6 @@ void swap(int num1, int num2, bool ifColumn)
 
 void generateBoard(void)
 {
-    //  [0,2 ] => (rand() % 3 ) + 0 * 3
-    //  [3, 5] => (rand() % 3 ) + 1 * 3
-    //  [6, 8] => (rand() % 3 ) + 2 * 3
-    // srand(time(NULL));
-    // for (int i = 0; i < SHUFFLES; i++)
-    // {
-    //     int l = ((rand()%3) + (rand()*3) * 3);
-    //     swap(l, l, false);
-    // }
-    // for (int i = 0; i < SHUFFLES; i++)
-    // {
-    //     int l = ((rand()%3) + (rand()*3) * 3);
-    //     swap(l, l, true);
-    // }
-
     srand(time(NULL));
     int n, m;
     n = (rand() % 3)*3;
