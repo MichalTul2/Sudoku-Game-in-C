@@ -1,11 +1,32 @@
-//Michal Tulowiecki
+
+/*
+ * Michal Tulowiecki's Terminal Sudoku
+ * Typy proste i operatory arytmetyczne: ✓
+ * Zastosowanie pętli i instrukcji warunkowych: ✓
+ * Operacje na tablicach: ?
+ * Obsługa strumieni wejścia/ wyjścia: ?
+ * Dynamiczna alokacja pamięci: ✓
+ * Struktury: ✓
+ */
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
 
+
 #define SHUFFLES 20
+
+struct Game
+{
+    /* game variables */
+    int hearts;
+    int hints;
+    int turn;
+    int level;
+} game = {3, 10, 0};
+
 
 int goodBoard[9][9] = {
     {2, 9, 5, 7, 4, 3, 8, 6, 1},
@@ -29,8 +50,6 @@ int userBoard[9][9] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
-int hearts = 3;
-
 /*
  * function : isEnd
  * purpose  : coming soon :)
@@ -40,14 +59,16 @@ int hearts = 3;
 
 bool isEnd()
 {
-    int madeCells = 0;
-    if (hearts <= 0)
+    if (game.hearts <= 0)
+    {
+        printf("NO MORE LIVES :(\n");
         return true;
-    for (int i = 0; i < 6; i++)
-        for (int j = 0; j < 6; j++)
+    }
+    for (int i = 0; i < 9; i++)
+        for (int j = 0; j < 9; j++)
             if (userBoard[i][j] == 0)
                 return false;
-
+    printf("YOU WIN!\n");
     return true;
 }
 
@@ -62,25 +83,10 @@ char *printCell(column, row)
 {
     if (userBoard[column][row] == 0)
         return " ";
-
     int length = snprintf(NULL, 0, "%d", userBoard[column][row]);
-    char *string = malloc(length + 1); //
+    char *string = malloc(length + 1);
     snprintf(string, length + 1, "%d", userBoard[column][row]);
     return string;
-}
-
-/*
- * function : printMenu
- * purpose  : coming soon :)
- * input    : coming soon :)
- * output   : coming soon :)
- */
-
-void printMenu()
-{
-    printf("WCISNIJ H ZEBY DOSTAĆ WSKAZOWKE\n");
-    printf("WCISNIJ J ZEBY ZGADYWAĆ\n");
-    printf("WCISNIJ R ZEBY ZAKONCZYC\n");
 }
 
 /*
@@ -92,10 +98,20 @@ void printMenu()
 
 void printBoard()
 {
-    system("clear");
-    printf("ZYCIA:");
-    for (int i = 0; i < hearts; i++)
-        printf(" <3 ");
+    system("clear || cls");
+    switch (game.hearts)
+    {
+    case 3:
+        printf("<3 <3 <3    TURN : %d     HINTS: %d \n", game.turn, game.hints);
+        break;
+    case 2:
+        printf("<3 <3       TURN : %d     HINTS: %d \n", game.turn, game.hints);
+        break;
+    case 1:
+        printf("<3          TURN : %d     HINTS: %d \n", game.turn, game.hints);
+        break;
+    }
+    printf("-----------------------------------\n");
     printf("\n| X | 1  2  3 | 4  5  6 | 7  8  9 |\n");
     printf("-----------------------------------\n");
     printf("| 1 | %s  %s  %s | %s  %s  %s | %s  %s  %s |\n",
@@ -140,142 +156,158 @@ void printBoard()
 }
 
 /*
- * function : endGame
- * purpose  : coming soon :)
- * input    : coming soon :)
- * output   : coming soon :)
+ * function : guess
+ * purpose  : gets user input about cell 
+ * input    : void
+ * output   : void
  */
 
-void endGame()
+void guess(void)
 {
-    printBoard();
-    printf("Brawo, udalo Ci sie!");
+    int column, row, value;
+    printf("COLUMN: ");
+    scanf("%d", &column);
+    printf("ROW: ");
+    scanf("%d", &row);
+    printf("VALUE: ");
+    scanf("%d", &value);
+    column--;
+    row--;
+    if (column * row * value < 0 || column > 9 || row > 9 || value > 9)
+    {
+        printf("INVALID INPUT\n");
+        return;
+    }
+    if (userBoard[row][column] != 0)
+    {
+        game.turn++;
+        printBoard();
+        printf("DONT LIE! YOU CAN SEE THAT\n\n");
+
+        return;
+    }
+    else if (goodBoard[row][column] == value)
+    {
+        game.turn++;
+        userBoard[row][column] = goodBoard[row][column];
+        printBoard();
+        printf("GOOD GAME!\n\n");
+    }
+    else
+    {
+        game.turn++;
+        game.hearts--;
+        printBoard();
+        printf("TRY AGAIN\n\n");
+    }
 }
 
 /*
- * function : giveHint
+ * function : showRandomCell
  * purpose  : coming soon :)
  * input    : coming soon :)
  * output   : coming soon :)
  */
 
-void giveHint()
+void showRandomCell(void)
 {
     int rndRow = rand() % 9;
     int rndCol = rand() % 9;
     if (userBoard[rndRow][rndCol] != 0)
     {
-        giveHint();
+        showRandomCell();
         return;
     }
     else
         userBoard[rndRow][rndCol] = goodBoard[rndRow][rndCol];
-    printBoard();
-    printMenu();
 }
 
 /*
- * function : guess
+ * function : loadMenu
  * purpose  : coming soon :)
  * input    : coming soon :)
  * output   : coming soon :)
  */
 
-void guess()
+void loadMenu(void)
 {
-    int column, row, value;
-    printBoard();
-    printf("A WIEC ZGADUJ\n");
-    printf("[WIERSZ] [KOLUMNA] [WARTOSC]:\n");
-    scanf("%d %d %d", &row, &column, &value);
-    row--;
-    column--;
-    if (userBoard[row][column] != 0)
+    int choice;
+    printf("Menu\n");
+    printf("1. HINT\n");
+    printf("2. GUESS\n");
+    printf("3. EXIT\n\n");
+    printf("YOUR CHOICE: ");
+    scanf("%d", &choice);
+    switch (choice)
     {
-        printBoard();
-        printf("TE POLE JEST JUZ ODKRYTE GLUPTASIE\n");
-        printMenu();
-        return;
-    }
-    if (goodBoard[row][column] == value)
-    {
-        userBoard[row][column] = goodBoard[row][column];
-        printBoard();
-        printf("GOOD GAME!\nGRAJ DALEJ!\n");
-        printMenu();
-    }
-    else
-    {
-        hearts--;
-        printBoard();
-        printf("NIE UDALO SIE :(\nZOSTALO CI %d ZYCIA\n", hearts);
-        printMenu();
+        case 1:
+            if (game.hints > 0)
+            {
+                showRandomCell();
+                game.hints--;
+                game.turn++;
+                printBoard();
+            }
+            else{
+                printBoard();
+                printf("HINTS: 0\n");
+            }
+            break;
+        case 2:
+            guess();
+            break;
+        case 3:
+            printf("See you soon :)\n");
+            exit(EXIT_SUCCESS);
+            break;
+        default:
+            printBoard();
+            printf("Invalid input!\n");
+            break;
     }
 }
 
 /*
- * function : nextTurn
+ * function : chooseLevel
  * purpose  : coming soon :)
  * input    : coming soon :)
  * output   : coming soon :)
  */
 
-void nextTurn()
+void chooseLevel(void)
 {
-    int keyPress;
-    keyPress = getchar();
-    putchar(keyPress);
-    switch (keyPress)
-    {
-    case 'h':
-    case 'H':
-        giveHint();
-        break;
-
-    case 'j':
-    case 'J':
-        guess();
-        break;
-
-    case 'r':
-    case 'R':
-        exit(EXIT_SUCCESS);
-        break;
-    }
-}
-
-/*
- * function : startGame
- * purpose  : coming soon :)
- * input    : coming soon :)
- * output   : coming soon :)
- */
-
-void startGame()
-{
-    system("clear");
-    int hardnessLevel = 0;
-    int cellStart = 0;
-    printf("WYBIERZ POZIOM TRUDNOSCI\n");
-    printf("1. LATWY\n");
-    printf("2. SREDNI\n");
-    printf("3. TRUDNY\n");
-    scanf("%d", &hardnessLevel);
-    switch (hardnessLevel)
+    system("clear || cls");
+    int choice;
+    printf("Choose your difficulty level\n");
+    printf("1. EASY\n");
+    printf("2. MEDIUM\n");
+    printf("3. HARD\n");
+    scanf("%d", &choice);
+    switch (choice)
     {
     case 1:
-        cellStart = 50;
+        game.level = 57;
+        game.hints = 10;
         break;
     case 2:
-        cellStart = 30;
+        game.level = 39;
+        game.hints = 6;
         break;
     case 3:
-        cellStart = 15;
+        game.level = 24;
+        game.hints = 3;
+        break;
+    default:
+        chooseLevel();
         break;
     }
-
-    for (int i = 0; i < cellStart; i++)
-        giveHint();
+    if ( choice < 1 || choice > 3){
+        printf("Invalid input");
+        chooseLevel();
+    }
+    for (int i = 0; i < game.level; i++)
+        showRandomCell();
+    printBoard();
 }
 
 /*
@@ -287,6 +319,7 @@ void startGame()
 
 void swap(int num1, int num2, bool ifColumn)
 {
+    
     int temp = 0;
     for (int i = 0; i < 9; i++)
     {
@@ -312,14 +345,70 @@ void swap(int num1, int num2, bool ifColumn)
  * output   : coming soon :)
  */
 
-void generateBoard()
+void generateBoard(void)
 {
+    //  [0,2 ] => (rand() % 3 ) + 0 * 3
+    //  [3, 5] => (rand() % 3 ) + 1 * 3
+    //  [6, 8] => (rand() % 3 ) + 2 * 3
+    // srand(time(NULL));
+    // for (int i = 0; i < SHUFFLES; i++)
+    // {
+    //     int l = ((rand()%3) + (rand()*3) * 3);
+    //     swap(l, l, false);
+    // }
+    // for (int i = 0; i < SHUFFLES; i++)
+    // {
+    //     int l = ((rand()%3) + (rand()*3) * 3);
+    //     swap(l, l, true);
+    // }
+
     srand(time(NULL));
-    for (int i = 0; i < SHUFFLES; i++)
-    {
-        swap(rand() % 9, rand() % 9, false);
-        swap(rand() % 9, rand() % 9, true);
+    int n, m;
+    n = (rand() % 3)*3;
+    m = rand() % 1;
+    for(int i = 0; i < SHUFFLES; i++){
+        switch(rand() % 6){
+            case 0:
+                swap(n+0, m ? n+1 : n+2, false);
+                break;
+            case 1:
+                swap(n+1, m ? n+0 : n+2, false);
+                break;
+            case 2:
+                swap(n+2, m ? n+0 : n+1, false);
+                break;
+            case 3:
+                swap(n+0, m ? n+1 : n+2, true);
+                break;
+            case 4:
+                swap(n+1, m ? n+0 : n+2, true);
+                break;
+            case 5:
+                swap(n+2, m ? n+0 : n+1, true);
+                break;
+        }
     }
+}
+
+/*
+ * function : boardFromFile
+ * purpose  : coming soon :)
+ * input    : coming soon :)
+ * output   : coming soon :)
+ */
+
+void boardFromFile(void){
+    FILE * f;
+    if((f = fopen("Board.txt", "r")) == NULL){
+        printf("FILE ERROR");
+        exit(1);
+    }
+    for (int i = 0; i < 9; i++)
+        for(int j = 0; j < 9; j++)
+            if ( fscanf(f, "%d", &goodBoard[i][j]) != 1)
+                exit(1);
+    
+    fclose(f);
 }
 
 /*
@@ -329,16 +418,33 @@ void generateBoard()
  * output   : coming soon :)
  */
 
+void pickBoardSource(void){
+    int choice;
+    system("clear || cls");
+    printf("MENU\n");
+    printf("1.BOARD GENERATOR\n");
+    printf("2.BOARD FROM FILE\n");
+    printf("YOUR CHOICE:");
+    scanf("%d", &choice);
+    switch(choice){
+        case 1:
+            generateBoard();
+            return;
+        case 2:
+            boardFromFile();
+            return;
+        default:
+            pickBoardSource();
+            break;
+    }
+}
+
 int main()
 {
-    generateBoard();
-    startGame();
-    do
-    {
-        nextTurn();
-        isEnd();
-    } while (!isEnd());
-    endGame();
-
+    pickBoardSource();
+    system("clear || cls");
+    chooseLevel();
+    do loadMenu() ;
+    while (!isEnd());
     return 0;
 }
