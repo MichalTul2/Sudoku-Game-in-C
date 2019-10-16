@@ -1,14 +1,3 @@
-
-/*
- * Michal Tulowiecki's Terminal Sudoku
- * Typy proste i operatory arytmetyczne: ✓
- * Zastosowanie pętli i instrukcji warunkowych: ✓
- * Operacje na tablicach: ?
- * Obsługa strumieni wejścia/ wyjścia: ?
- * Dynamiczna alokacja pamięci: ✓
- * Struktury: ✓
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -36,16 +25,16 @@ int goodBoard[9][9] = {/* template, right solved sudoku board */
                        {9, 2, 8, 6, 7, 1, 3, 5, 4},
                        {1, 5, 4, 9, 3, 8, 6, 7, 2}};
 
-int userBoard[9][9] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0}};
+int userBoard[9][9] = {/* the board we are working on */
+                       {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
 /*
  * function : isEnd
@@ -98,6 +87,7 @@ char *printCell(int column, int row)
 void printBoard(void)
 {
     system("clear || cls");
+    /* printing game stats */
     switch (game.hearts)
     {
     case 3:
@@ -110,6 +100,7 @@ void printBoard(void)
         printf("<3          TURN : %d     HINTS: %d \n", game.turn, game.hints);
         break;
     }
+    /* printing game board */
     printf("-----------------------------------\n");
     printf("\n| X | 1  2  3 | 4  5  6 | 7  8  9 |\n");
     printf("-----------------------------------\n");
@@ -163,6 +154,7 @@ void printBoard(void)
 
 void guess(void)
 {
+    /* taking input  about guess */
     int column, row, value;
     printf("COLUMN: ");
     scanf("%d", &column);
@@ -172,6 +164,7 @@ void guess(void)
     scanf("%d", &value);
     column--;
     row--;
+    /* check if input is correct */
     if (column * row * value < 0 || column > 9 || row > 9 || value > 9)
     {
         printf("INVALID INPUT\n");
@@ -214,6 +207,7 @@ void showRandomCell(void)
     int rndCol = rand() % 9;
     if (userBoard[rndRow][rndCol] != 0)
     {
+        /* if cell is already shown repeat showRandomCell*/
         showRandomCell();
         return;
     }
@@ -262,6 +256,7 @@ void loadMenu(void)
         exit(EXIT_SUCCESS);
         break;
     default:
+        /* if input is correct */
         printBoard();
         printf("Invalid input!\n");
         break;
@@ -301,13 +296,9 @@ void chooseLevel(void)
         game.hints = 3;
         break;
     default:
+        /* if input is correct */
         chooseLevel();
         break;
-    }
-    if (choice < 1 || choice > 3)
-    {
-        printf("Invalid input");
-        chooseLevel();
     }
     for (int i = 0; i < game.level; i++)
         showRandomCell();
@@ -346,7 +337,7 @@ void swap(int num1, int num2, bool ifColumn)
 
 /*
  * function : generateBoard
- * purpose  : algorithm which edits goodBoard array to give at                 every game diffrent sudoku board
+ * purpose  : algorithm which edits goodBoard array to give at every game diffrent sudoku board
  * input    : void
  * output   : nothing
  */
@@ -408,7 +399,7 @@ void boardFromFile(void)
 
 /*
  * function : picBoardSource
- * purpose  : allows user to choose board destination beetwen build in gooodBoard array or board                 from file
+ * purpose  : allows user to choose board destination beetwen build in gooodBoard array or board from file
  * input    : void
  * output   : nothing
  */
@@ -431,6 +422,7 @@ void pickBoardSource(void)
         boardFromFile();
         return;
     default:
+        /* if input is correct */
         pickBoardSource();
         break;
     }
