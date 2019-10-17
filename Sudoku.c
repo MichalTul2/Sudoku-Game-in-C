@@ -8,11 +8,19 @@
 struct Game
 {
     /* game variables */
-    int hearts;
-    int hints;
-    int turn;  /* counter */
-    int level; /* defines how hard the game is */
+    unsigned short hearts;
+    unsigned short hints;
+    unsigned short turn;  /* counter */
+    unsigned short level; /* defines how hard the game is */
 } game = {3, 10, 0};
+
+enum choices
+{
+    Zero,
+    FirstChoice,
+    SecondChoice,
+    ThirdChoice
+};
 
 int goodBoard[9][9] = {/* template, right solved sudoku board */
                        {2, 9, 5, 7, 4, 3, 8, 6, 1},
@@ -155,13 +163,13 @@ void printBoard(void)
 void guess(void)
 {
     /* taking input  about guess */
-    int column, row, value;
+    unsigned short column, row, value;
     printf("COLUMN: ");
-    scanf("%d", &column);
+    scanf("%hu", &column);
     printf("ROW: ");
-    scanf("%d", &row);
+    scanf("%hu", &row);
     printf("VALUE: ");
-    scanf("%d", &value);
+    scanf("%hu", &value);
     column--;
     row--;
     /* check if input is correct */
@@ -225,16 +233,16 @@ void showRandomCell(void)
 
 void loadMenu(void)
 {
-    int choice;
+    unsigned short choice;
     printf("Menu\n");
     printf("1. HINT\n");
     printf("2. GUESS\n");
     printf("3. EXIT\n");
     printf("YOUR CHOICE:");
-    scanf("%d", &choice);
+    scanf("%hu", &choice);
     switch (choice)
     {
-    case 1:
+    case FirstChoice:
         if (game.hints > 0)
         {
             showRandomCell();
@@ -248,10 +256,10 @@ void loadMenu(void)
             printf("HINTS: 0\n");
         }
         break;
-    case 2:
+    case SecondChoice:
         guess();
         break;
-    case 3:
+    case ThirdChoice:
         printf("See you soon :)\n");
         exit(EXIT_SUCCESS);
         break;
@@ -274,24 +282,24 @@ void loadMenu(void)
 void chooseLevel(void)
 {
     system("clear || cls");
-    int choice;
+    unsigned short choice;
     printf("Choose your difficulty level\n");
     printf("1. EASY\n");
     printf("2. MEDIUM\n");
     printf("3. HARD\n");
     printf("YOUR CHOICE:");
-    scanf("%d", &choice);
+    scanf("%hu", &choice);
     switch (choice)
     {
-    case 1:
+    case FirstChoice:
         game.level = 57;
         game.hints = 10;
         break;
-    case 2:
+    case SecondChoice:
         game.level = 39;
         game.hints = 6;
         break;
-    case 3:
+    case ThirdChoice:
         game.level = 24;
         game.hints = 3;
         break;
@@ -316,7 +324,7 @@ void chooseLevel(void)
 void swap(int num1, int num2, bool ifColumn)
 {
 
-    int temporary = 0;
+    unsigned short temporary = 0;
     for (int i = 0; i < 9; i++)
     {
         if (ifColumn == 1)
@@ -345,7 +353,7 @@ void swap(int num1, int num2, bool ifColumn)
 void generateBoard(void)
 {
     srand(time(NULL));
-    int n, m;
+    unsigned short n, m;
     n = (rand() % 3) * 3;
     m = rand() % 1;
     for (int i = 0; i < SHUFFLES; i++)
@@ -406,19 +414,19 @@ void boardFromFile(void)
 
 void pickBoardSource(void)
 {
-    int choice;
+    unsigned short choice;
     system("clear || cls");
     printf("MENU\n");
     printf("1.BOARD GENERATOR\n");
     printf("2.BOARD FROM FILE\n");
     printf("YOUR CHOICE:");
-    scanf("%d", &choice);
+    scanf("%hu", &choice);
     switch (choice)
     {
-    case 1:
+    case FirstChoice:
         generateBoard();
         return;
-    case 2:
+    case SecondChoice:
         boardFromFile();
         return;
     default:
