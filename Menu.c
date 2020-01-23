@@ -89,9 +89,9 @@ int levelMenu() {
         fclose(logo_ptr);
     }
 
-    arrowHere(0, choice); printf("EASY\n");
-    arrowHere(1, choice); printf("MEDIUM\n");
-    arrowHere(2, choice); printf("HARD\n");
+    arrowHere(0, choice); printf("easy\n");
+    arrowHere(1, choice); printf("medium\n");
+    arrowHere(2, choice); printf("hard\n");
 
     struct termios oldt, newt;
     tcgetattr(STDIN_FILENO, &oldt);

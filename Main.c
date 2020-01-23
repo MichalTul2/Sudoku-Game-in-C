@@ -31,17 +31,16 @@ int main() {
     switch (startMenu())
     {
         case CONTINUE:
-        printf("Ups");
+        printf("");
         return 0;
         break;
 
         case NEW_GAME:
         level = levelMenu();
         generateBoard(userBoard, goodBoard, level);
+        game(&userBoard, goodBoard);
         break;
     }
-
-    printBoard(&userBoard);
 
     //memory deallocation
     deallocateArray(&userBoard, 9);
