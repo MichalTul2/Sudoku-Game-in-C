@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <time.h>
+#include "Struct.h"
 
 #define SHUFFLES 20
 
@@ -45,7 +46,7 @@ void showRandomCell(int fromArray[][9], int **toArray)
 }
 
 
-void generateBoard(int **userBoard, int goodBoard[][9], int level)
+void generateBoard(int **userBoard, int goodBoard[][9], Game_Type *game)
 {
     srand(time(NULL));
     unsigned short n, m;
@@ -76,7 +77,7 @@ void generateBoard(int **userBoard, int goodBoard[][9], int level)
         }
     }
 
-    for (int i = 0; i < level; i++)
+    for (int i = 0; i < game->level; i++)
         showRandomCell(goodBoard, userBoard);
 
     return;

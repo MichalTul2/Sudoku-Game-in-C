@@ -14,15 +14,15 @@ void printLogo( FILE *fptr){
 
 void arrowHere(int realPosition, int arrowPosition) {
     if(realPosition == arrowPosition){
-        printf("   ---->  ");
+        printf("---->  ");
     }
     else{
-        printf("          ");
+        printf("       ");
     }
 }
 
 int startMenu() {
-    short int choice = 0;
+    short int choice = 1;
     short int keyPressed = 0;
     short int minChoice = 1;
     short int maxChoice = 2;
@@ -40,12 +40,12 @@ int startMenu() {
 
     if(( board_ptr = fopen("Board.txt", "r")) != NULL){
         minChoice = 0;
-        arrowHere(0, choice); printf(" CONTINUE\n");
+        arrowHere(0, choice); printf("continue\n");
         fclose(board_ptr);
     }
 
-    arrowHere(1, choice); printf(" NEW GAME\n");
-    arrowHere(2, choice); printf(" EXIT\n");
+    arrowHere(1, choice); printf("new game\n");
+    arrowHere(2, choice); printf("exit\n");
 
     struct termios oldt, newt;
     tcgetattr(STDIN_FILENO, &oldt);

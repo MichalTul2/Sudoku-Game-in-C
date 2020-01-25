@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "Struct.h"
 #include "Menu.c"
 #include "Board.c"
 #include "Game.c"
+#include "File.c"
 
 
 #define CONTINUE 0
@@ -11,7 +13,14 @@
 
 
 int main() {
-    int level = 0;
+
+    Game_Type *game;
+    game = (Game_Type*)malloc(sizeof(Game_Type));
+    game->hearts = 3;
+    game->hints = 10;
+    game->turn = 0;
+    game->level = 0;
+
     int goodBoard[9][9] = {/* template, right solved sudoku board */
                        {2, 9, 5, 7, 4, 3, 8, 6, 1},
                        {4, 3, 1, 8, 6, 5, 9, 2, 7},
@@ -31,14 +40,14 @@ int main() {
     switch (startMenu())
     {
         case CONTINUE:
-        printf("");
-        return 0;
+        loadGameFromFile(&userBoard, goodBoard, game);
+        startGame(&userBoard, goodBoard, game);
         break;
 
         case NEW_GAME:
-        level = levelMenu();
-        generateBoard(userBoard, goodBoard, level);
-        game(&userBoard, goodBoard);
+        game->level = levelMenu();
+        generateBoard(userBoard, goodBoard, game);
+        startGame(&userBoard, goodBoard, game);
         break;
     }
 

@@ -1,12 +1,5 @@
 #include <stdio.h>
-
-typedef struct Game
-{
-    /* game variables */
-    unsigned short hearts;
-    unsigned short hints;
-    unsigned short turn;  /* counter */
-} Game_Type;
+#include "Struct.h"
 
 
 int isEnd(int ***array, Game_Type *game)
@@ -29,7 +22,7 @@ int isEnd(int ***array, Game_Type *game)
     return 1;
 }
 
-void printBoard(int ***array, Game_Type *game){
+void printHeader( Game_Type *game){
     switch (game->hearts)
     {
     case 3:
@@ -42,6 +35,10 @@ void printBoard(int ***array, Game_Type *game){
         printf("<3          TURN : %d     HINTS: %d \n", game->turn, game->hints);
         break;
     }
+}
+
+void printBoard(int ***array, Game_Type *game){
+    printHeader(game);
     printf("X |  1  2  3  4  5  6  7  8  9\n");
     printf("--|----------------------------|--\n");
     for (int i = 0; i < 9; i++)
@@ -67,8 +64,8 @@ void guess(int ***userBoard, int referenceBoard[][9], Game_Type *game)
     printf("column: "); scanf("%hd", &column);
     printf("row: "); scanf("%hu", &row);
     printf("value: "); scanf("%hu", &value);
-    column--;
-    row--;
+    --column;
+    --row;
     /* check if input is correct */
     if ((*userBoard)[row][column] != 0)
     {
@@ -81,7 +78,7 @@ void guess(int ***userBoard, int referenceBoard[][9], Game_Type *game)
     else if (referenceBoard[row][column] == value)
     {
         game->turn++;
-        userBoard[row][column] = &referenceBoard[row][column];
+        (*userBoard)[row][column] = referenceBoard[row][column];
         system("cls || clear");
         printBoard(userBoard, game);
         printf("good game!\n\n");
@@ -106,6 +103,7 @@ void takeHint(int ***userBoard, int referenceBoard[][9], Game_Type *game)
         return;
     }
     game->hints--;
+    game->turn++;
     int rndRow, rndCol;
     do {
     rndRow = rand() % 9;
@@ -121,13 +119,8 @@ void takeHint(int ***userBoard, int referenceBoard[][9], Game_Type *game)
 
 
 
-void game (int ***userBoard, int referenceBoard[][9])
+void startGame (int ***userBoard, int referenceBoard[][9], Game_Type *game)
 {
-    Game_Type *game;
-    game = (Game_Type*)malloc(sizeof(Game_Type));
-    game->hearts = 3;
-    game->hints = 10;
-    game->turn = 0;
 
     system("cls || clear");
     int option=-1;
@@ -139,7 +132,8 @@ void game (int ***userBoard, int referenceBoard[][9])
         printf("what you gonna do?\n");
         printf("1.  let me take a guess\n");
         printf("2.  give me a hint\n");
-        printf("0.  im done. save and exit\n\n");
+        printf("3.  im done. save and exit\n");
+        printf("0.  exit\n\n");
         scanf("%d", &option);
 
         switch (option)
@@ -150,8 +144,10 @@ void game (int ***userBoard, int referenceBoard[][9])
             case 2:
             takeHint(userBoard, referenceBoard, game);
             break;
+            case 3:
+            saveGameToFile(userBoard, referenceBoard, game);
+            return;
             case 0:
-            //
             return;
         }
     }
