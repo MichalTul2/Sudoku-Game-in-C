@@ -26,13 +26,13 @@ void printHeader( Game_Type *game){
     switch (game->hearts)
     {
     case 3:
-        printf("<3 <3 <3    TURN : %d     HINTS: %d \n", game->turn, game->hints);
+        printf("<3 <3 <3    TURNS : %d     HINTS: %d \n", game->turn, game->hints);
         break;
     case 2:
-        printf("<3 <3       TURN : %d     HINTS: %d \n", game->turn, game->hints);
+        printf("<3 <3       TURNS : %d     HINTS: %d \n", game->turn, game->hints);
         break;
     case 1:
-        printf("<3          TURN : %d     HINTS: %d \n", game->turn, game->hints);
+        printf("<3          TURNS : %d     HINTS: %d \n", game->turn, game->hints);
         break;
     }
 }
@@ -99,7 +99,7 @@ void takeHint(int ***userBoard, int referenceBoard[][9], Game_Type *game)
     {
         system("cls || clear");
         printBoard(userBoard, game);
-        printf("I trusted you, but now you exploited that trust\n");
+        printf("no more hints\n");
         return;
     }
     game->hints--;
@@ -139,16 +139,16 @@ void startGame (int ***userBoard, int referenceBoard[][9], Game_Type *game)
         switch (option)
         {
             case 1:
-            guess(userBoard, referenceBoard, game);
-            break;
+                guess(userBoard, referenceBoard, game);
+                break;
             case 2:
-            takeHint(userBoard, referenceBoard, game);
-            break;
+                takeHint(userBoard, referenceBoard, game);
+                break;
             case 3:
-            saveGameToFile(userBoard, referenceBoard, game);
-            return;
+                saveGameToFile(userBoard, referenceBoard, game);
+                return;
             case 0:
-            return;
+                return;
         }
     }
 

@@ -5,8 +5,8 @@ typedef struct Game
 {
     /* game variables */
     unsigned short hearts;
+    unsigned short turn;
     unsigned short hints;
-    unsigned short turn;  /* counter */
     unsigned short level;  /* counter */
 
 } Game_Type;
