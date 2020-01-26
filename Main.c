@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "Struct.h"
-#include "Menu.c"
-#include "Board.c"
-#include "Game.c"
-#include "File.c"
+#include "struct.h"
+#include "menu.c"
+#include "board.c"
+#include "game.c"
+#include "file.c"
+
 
 
 #define CONTINUE 0

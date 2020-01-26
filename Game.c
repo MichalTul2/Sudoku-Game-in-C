@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "Struct.h"
+#include "struct.h"
 
 
 int isEnd(int ***array, Game_Type *game)
@@ -70,7 +70,10 @@ void guess(int ***userBoard, int referenceBoard[][9], Game_Type *game)
     if ((*userBoard)[row][column] != 0)
     {
         game->turn++;
-        system("cls || clear");
+        if (system("cls || clear") == -1) {
+            perror("Error. System method");
+            exit(1);
+        }
         printBoard(userBoard, game);
         printf("come on, you can see that\n");
         return;
@@ -79,7 +82,10 @@ void guess(int ***userBoard, int referenceBoard[][9], Game_Type *game)
     {
         game->turn++;
         (*userBoard)[row][column] = referenceBoard[row][column];
-        system("cls || clear");
+        if (system("cls || clear") == -1) {
+            perror("Error. System method");
+            exit(1);
+        }
         printBoard(userBoard, game);
         printf("good game!\n\n");
     }
@@ -87,7 +93,10 @@ void guess(int ***userBoard, int referenceBoard[][9], Game_Type *game)
     {
         game->turn++;
         game->hearts--;
-        system("cls || clear");
+        if (system("cls || clear") == -1) {
+            perror("Error. System method");
+            exit(1);
+        }
         printBoard(userBoard, game);
         printf("ups :(\n");
     }
@@ -97,7 +106,10 @@ void takeHint(int ***userBoard, int referenceBoard[][9], Game_Type *game)
 {
     if(game->hints < 1)
     {
-        system("cls || clear");
+        if (system("cls || clear") == -1) {
+            perror("Error. System method");
+            exit(1);
+        }
         printBoard(userBoard, game);
         printf("no more hints\n");
         return;
@@ -111,7 +123,10 @@ void takeHint(int ***userBoard, int referenceBoard[][9], Game_Type *game)
     } while ((*userBoard)[rndRow][rndCol] != 0);
 
     (*userBoard)[rndRow][rndCol] = referenceBoard[rndRow][rndCol];
-    system("cls || clear");
+    if (system("cls || clear") == -1) {
+            perror("Error. System method");
+            exit(1);
+        }
     printBoard(userBoard, game);
     return;
 
@@ -122,7 +137,10 @@ void takeHint(int ***userBoard, int referenceBoard[][9], Game_Type *game)
 void startGame (int ***userBoard, int referenceBoard[][9], Game_Type *game)
 {
 
-    system("cls || clear");
+    if (system("cls || clear") == -1) {
+            perror("Error. System method");
+            exit(1);
+        }
     int option=-1;
     printBoard(userBoard, game);
 
@@ -148,6 +166,7 @@ void startGame (int ***userBoard, int referenceBoard[][9], Game_Type *game)
                 saveGameToFile(userBoard, referenceBoard, game);
                 return;
             case 0:
+                exit(0);
                 return;
         }
     }

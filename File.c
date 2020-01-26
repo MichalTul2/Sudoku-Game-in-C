@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "Struct.h"
+#include "struct.h"
 
 int numOfFileLines( FILE *fileName){
     int counter = 0;
@@ -26,11 +26,11 @@ void loadGameFromFile (int ***array, int referenceBoard[][9], Game_Type *game){
 
     if ( file == NULL ){
         perror("Error opening file");
-        exit(EXIT_FAILURE);
+        exit(1);
     }
     if ( binaryFile == NULL ){
-        perror("Error opening file");
-        exit(EXIT_FAILURE);
+        perror("Error opening binary file");
+        exit(1);
     }
 
     printf("SAVE SLOTS:\n");
@@ -41,7 +41,7 @@ void loadGameFromFile (int ***array, int referenceBoard[][9], Game_Type *game){
     printf("Which one do you choose? ");
     scanf("%d", &saveChoose);
     saveChoose--;
-    fseek(file, 164*saveChoose, SEEK_SET);
+    fseek(file, 16*saveChoose, SEEK_SET);
     fseek(binaryFile,sizeof(Game_Type)*saveChoose, SEEK_SET);
 
     for (int i = 0; i < 9; i++) {
@@ -56,8 +56,16 @@ void loadGameFromFile (int ***array, int referenceBoard[][9], Game_Type *game){
         }
     }
     fread(game, sizeof(Game_Type), 1, binaryFile);
-    fclose(file);
-    fclose(binaryFile);
+
+    if (fclose(file) == EOF){
+        perror("Eroor. Changes not saved ");
+        exit(1);
+    }
+
+    if (fclose(binaryFile) == EOF){
+        perror("Eroor. Changes not saved");
+        exit(1);
+    }
 
     return;
 }
@@ -71,13 +79,13 @@ void saveGameToFile (int ***userBoard, int referenceBoard[][9], Game_Type *game)
 
     if ( file == NULL ){
         perror("Error opening file");
-        exit(EXIT_FAILURE);
+        exit(1);
     }
     if ( binaryFile == NULL ){
-        perror("Error opening file");
-        exit(EXIT_FAILURE);
+        perror("Error opening binary file");
+        exit(1);
     }
-    
+
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             fprintf( file, "%1d", *(*(*userBoard + i) + j));
@@ -91,8 +99,15 @@ void saveGameToFile (int ***userBoard, int referenceBoard[][9], Game_Type *game)
     }
     fprintf( file, "\n");
     fwrite(game, sizeof(Game_Type), 1, binaryFile);
+    if (fclose(file) == EOF){
+        perror("Eroor. Changes not saved ");
+        exit(1);
+    }
+    if (fclose(binaryFile) == EOF){
+        perror("Eroor. Changes not saved");
+        exit(1);
+    }
     printf("Saved successfully!\n");
-    fclose(file);
-    fclose(binaryFile);
+
     return;
 }

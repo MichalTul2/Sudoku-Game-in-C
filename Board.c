@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <time.h>
-#include "Struct.h"
+#include "struct.h"
 
 #define SHUFFLES 20
 
@@ -89,6 +89,10 @@ void allocateArray( int ***array, int rows, int columns) //pointer to pointer of
     {
         for (int i = 0; i < 9; i++)
             *((*array) + i) = (int *)calloc(columns, sizeof(int));
+    }
+    else{
+        perror("memory allocation failure");
+        exit(1);
     }
 }
 
