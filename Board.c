@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
+
 #include "struct.h"
 
 #define SHUFFLES 20
@@ -46,7 +48,7 @@ void showRandomCell(int fromArray[][9], int **toArray)
 }
 
 
-void generateBoard(int **userBoard, int goodBoard[][9], Game_Type *game)
+void generateBoard(int **userBoard, int referenceBoard[][9], Game_Type *game)
 {
     srand(time(NULL));
     unsigned short n, m;
@@ -57,28 +59,28 @@ void generateBoard(int **userBoard, int goodBoard[][9], Game_Type *game)
         switch (rand() % 6)
         {
         case 0:
-            swapRow(goodBoard, n + 0, m ? n + 1 : n + 2);
+            swapRow(referenceBoard, n + 0, m ? n + 1 : n + 2);
             break;
         case 1:
-            swapRow(goodBoard, n + 1, m ? n + 0 : n + 2);
+            swapRow(referenceBoard, n + 1, m ? n + 0 : n + 2);
             break;
         case 2:
-            swapRow(goodBoard, n + 2, m ? n + 0 : n + 1);
+            swapRow(referenceBoard, n + 2, m ? n + 0 : n + 1);
             break;
         case 3:
-            swapColumn(goodBoard, n + 0, m ? n + 1 : n + 2);
+            swapColumn(referenceBoard, n + 0, m ? n + 1 : n + 2);
             break;
         case 4:
-            swapColumn(goodBoard, n + 1, m ? n + 0 : n + 2);
+            swapColumn(referenceBoard, n + 1, m ? n + 0 : n + 2);
             break;
         case 5:
-            swapColumn(goodBoard, n + 2, m ? n + 0 : n + 1);
+            swapColumn(referenceBoard, n + 2, m ? n + 0 : n + 1);
             break;
         }
     }
 
     for (int i = 0; i < game->level; i++)
-        showRandomCell(goodBoard, userBoard);
+        showRandomCell(referenceBoard, userBoard);
 
     return;
 }

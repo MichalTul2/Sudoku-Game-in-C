@@ -2,10 +2,7 @@
 #include <stdlib.h>
 
 #include "struct.h"
-#include "menu.c"
-#include "board.c"
-#include "game.c"
-#include "file.c"
+
 
 
 
@@ -22,7 +19,7 @@ int main() {
     game->turn = 0;
     game->level = 0;
 
-    int goodBoard[9][9] = {/* template, right solved sudoku board */
+    int referenceBoard[9][9] = {/* template, right solved sudoku board */
                        {2, 9, 5, 7, 4, 3, 8, 6, 1},
                        {4, 3, 1, 8, 6, 5, 9, 2, 7},
                        {8, 7, 6, 1, 9, 2, 5, 4, 3},
@@ -41,14 +38,14 @@ int main() {
     switch (startMenu())
     {
         case CONTINUE:
-        loadGameFromFile(&userBoard, goodBoard, game);
-        startGame(&userBoard, goodBoard, game);
+        loadGameFromFile(&userBoard, referenceBoard, game);
+        startGame(&userBoard, referenceBoard, game);
         break;
 
         case NEW_GAME:
         game->level = levelMenu();
-        generateBoard(userBoard, goodBoard, game);
-        startGame(&userBoard, goodBoard, game);
+        generateBoard(userBoard, referenceBoard, game);
+        startGame(&userBoard, referenceBoard, game);
         break;
     }
 
