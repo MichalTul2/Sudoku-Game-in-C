@@ -17,7 +17,8 @@ This program generates a different board each time or downloads the board from a
 
 - Download all files
 - Open the path in the terminal
-- Type  `./Sudoku`
+- Type  `make`
+- Type  `make run`
 
 
 ## Licence
