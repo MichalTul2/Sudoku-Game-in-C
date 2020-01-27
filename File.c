@@ -3,6 +3,13 @@
 
 #include "struct.h"
 
+/*
+* function  : numOfFileLines
+* purpose   : returns the number of "\n" in the opened text file
+* input     : pointer to opened text file
+* output    : number of lines
+*/
+
 int numOfFileLines( FILE *fileName){
     int counter = 0;
     int character;
@@ -17,6 +24,12 @@ int numOfFileLines( FILE *fileName){
 
 }
 
+/*
+* function  : loadGameFromFile
+* purpose   : loads a game save selected by the user from Board.txt and Board.bin
+* input     : user game board, well-filled pattern, game struct
+* output    : void
+*/
 
 void loadGameFromFile (int ***array, int referenceBoard[][9], Game_Type *game){
     static const char filename[] = "Board.txt";
@@ -51,27 +64,39 @@ void loadGameFromFile (int ***array, int referenceBoard[][9], Game_Type *game){
             fscanf( file, "%1d", (*(*array + i) + j));
         }
     }
-    fseek(file, 0, 1);
+    if (fseek(file, 0, 1) != 0){ //fseek to skip "x" separator
+        perror("Error while reading a file");
+    }
+
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             fscanf( file, "%1d", &referenceBoard[i][j]);
         }
     }
-    fread(game, sizeof(Game_Type), 1, binaryFile);
+    if (fread(game, sizeof(Game_Type), 1, binaryFile) < 1){
+        perror("Error while reading a binary file");
+                exit(1);
+    }
 
     if (fclose(file) == EOF){
-        perror("Eroor. Changes not saved ");
+        perror("Eroor while closing a file");
         exit(1);
     }
 
     if (fclose(binaryFile) == EOF){
-        perror("Eroor. Changes not saved");
+        perror("Eroor while closing a file");
         exit(1);
     }
 
     return;
 }
 
+/*
+* function  : saveGameToFile
+* purpose   : saves a game to Board.txt and Board.bin
+* input     : user game board, well-filled pattern, game struct
+* output    : void
+*/
 
 void saveGameToFile (int ***userBoard, int referenceBoard[][9], Game_Type *game){
     static const char fileName[] = "Board.txt";
@@ -88,21 +113,37 @@ void saveGameToFile (int ***userBoard, int referenceBoard[][9], Game_Type *game)
         exit(1);
     }
 
+    //first the entire userBoard character by character
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
-            fprintf( file, "%1d", *(*(*userBoard + i) + j));
+            if (fprintf( file, "%1d", *(*(*userBoard + i) + j)) < 0){
+                perror("Error. Save to file is incomplete");
+                exit(1);
+            }
         }
     }
+    // "X" as separator between userBoard and referenceBoard
     fprintf( file, "X");
+
+    //entire referenceBoard character by character
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
-            fprintf( file, "%1d", referenceBoard[i][j]);
+            if (fprintf( file, "%1d", referenceBoard[i][j]) < 0){
+                perror("Error. Save to file is incomplete");
+                exit(1);
+            };
         }
     }
+    //new line as separator between saves
     fprintf( file, "\n");
-    fwrite(game, sizeof(Game_Type), 1, binaryFile);
+
+    // append user game struct to binary file
+    if (fwrite(game, sizeof(Game_Type), 1, binaryFile) < 0){
+        perror("Error. Save to binaryfile is incomplete");
+        exit(1);
+    }
     if (fclose(file) == EOF){
-        perror("Eroor. Changes not saved ");
+        perror("Error. Changes not saved ");
         exit(1);
     }
     if (fclose(binaryFile) == EOF){

@@ -6,6 +6,12 @@
 
 #define SHUFFLES 20
 
+/*
+* function  : swapColumn
+* purpose   : replace the entire num1 column with num2 column in array
+* input     : reference array, num1, num2
+* output    : void
+*/
 
 void swapColumn(int array[][9], int num1, int num2)
 {
@@ -20,6 +26,13 @@ void swapColumn(int array[][9], int num1, int num2)
     return;
 }
 
+/*
+* function  : swapRow
+* purpose   : replace the entire num1 row with num2 row in array
+* input     : reference array, num1, num2
+* output    : void
+*/
+
 void swapRow(int array[][9], int num1, int num2)
 {
     unsigned short temporary = 0;
@@ -31,6 +44,13 @@ void swapRow(int array[][9], int num1, int num2)
     }
     return;
 }
+
+/*
+* function  : showRandomCell
+* purpose   : inserts the value of one cell from fromArray to toArray
+* input     : referenceArray, user array
+* output    : void
+*/
 
 void showRandomCell(int fromArray[][9], int **toArray)
 {
@@ -47,6 +67,12 @@ void showRandomCell(int fromArray[][9], int **toArray)
 
 }
 
+/*
+* function  : generateBoard
+* purpose   : the function creates a game environment for the player, userBoard
+* input     : game board array, well-filled pattern array, game structure containing the user's choice
+* output    : void
+*/
 
 void generateBoard(int **userBoard, int referenceBoard[][9], Game_Type *game)
 {
@@ -85,6 +111,13 @@ void generateBoard(int **userBoard, int referenceBoard[][9], Game_Type *game)
     return;
 }
 
+/*
+* function  : generateBoard
+* purpose   : the function allocates memory for the player's board
+* input     : array, num of rows, num of columns to allocate
+* output    : void
+*/
+
 void allocateArray( int ***array, int rows, int columns) //pointer to pointer of pointers pogJUMP
 {
     if (((*array) = (int **)calloc(rows, sizeof(int *))) != NULL)
@@ -97,6 +130,13 @@ void allocateArray( int ***array, int rows, int columns) //pointer to pointer of
         exit(1);
     }
 }
+
+/*
+* function  : generateBoard
+* purpose   : the function deallocates memory
+* input     : game board array, num of columns in array
+* output    : void
+*/
 
 void deallocateArray(int ***array, int columns){
     for (int i=0; i < columns; i++)

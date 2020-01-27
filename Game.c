@@ -3,6 +3,12 @@
 
 #include "struct.h"
 
+/*
+* function  : startMenu
+* purpose   : the function checks whether all fields on the board are uncovered or whether the user still has life
+* input     : user array, game struct
+* output    : 0 if it's not over, 1 if it's end
+*/
 
 int isEnd(int ***array, Game_Type *game)
 {
@@ -24,6 +30,13 @@ int isEnd(int ***array, Game_Type *game)
     return 1;
 }
 
+/*
+* function  : printHeader
+* purpose   : the function prints a header containing game statistics
+* input     : game struct
+* output    : void
+*/
+
 void printHeader( Game_Type *game){
     switch (game->hearts)
     {
@@ -38,6 +51,13 @@ void printHeader( Game_Type *game){
         break;
     }
 }
+
+/*
+* function  : printBoard
+* purpose   : the function prints user board in a nice way
+* input     : user game array, game struct
+* output    : void
+*/
 
 void printBoard(int ***array, Game_Type *game){
     printHeader(game);
@@ -58,6 +78,13 @@ void printBoard(int ***array, Game_Type *game){
     }
     printf("--|----------------------------|--\n");
 }
+
+/*
+* function  : guess
+* purpose   : function that gives the user the ability to guess the value
+* input     : userBoard, referenceBoard, game struct
+* output    : void
+*/
 
 void guess(int ***userBoard, int referenceBoard[][9], Game_Type *game)
 {
@@ -104,6 +131,13 @@ void guess(int ***userBoard, int referenceBoard[][9], Game_Type *game)
     }
 }
 
+/*
+* function  : takeHint
+* purpose   : the function shows one value to the user
+* input     : userBoard, referenceBoard, game struct
+* output    : void
+*/
+
 void takeHint(int ***userBoard, int referenceBoard[][9], Game_Type *game)
 {
     if(game->hints < 1)
@@ -134,7 +168,12 @@ void takeHint(int ***userBoard, int referenceBoard[][9], Game_Type *game)
 
 }
 
-
+/*
+* function  : startGame
+* purpose   : main function of the game
+* input     : userBoard, referenceBoard, game struct
+* output    : void
+*/
 
 void startGame (int ***userBoard, int referenceBoard[][9], Game_Type *game)
 {
@@ -168,7 +207,6 @@ void startGame (int ***userBoard, int referenceBoard[][9], Game_Type *game)
                 saveGameToFile(userBoard, referenceBoard, game);
                 return;
             case 0:
-                exit(0);
                 return;
         }
     }

@@ -28,3 +28,4 @@ void startGame (int ***userBoard, int referenceBoard[][9], Game_Type *game);
 void printHeader( Game_Type *game);
 
 #endif
+

@@ -7,11 +7,25 @@
 #define UP_ARROW 66
 #define DOWN_ARROW 65
 
+/*
+* function  : printLogo
+* purpose   : the function prints the ascii art logo from the fileptr
+* input     : pointer to a file containing ascii art
+* output    : void
+*/
+
 void printLogo( FILE *fptr){
     char readLine[MAX_LEN];
     while(fgets(readLine,sizeof(readLine),fptr) != NULL)
         printf("%s",readLine);
 }
+
+/*
+* function  : arrowHere
+* purpose   : print arrow in menu view
+* input     : realPosition, arrowPosition
+* output    : void
+*/
 
 void arrowHere(int realPosition, int arrowPosition) {
     if(realPosition == arrowPosition){
@@ -21,6 +35,13 @@ void arrowHere(int realPosition, int arrowPosition) {
         printf("       ");
     }
 }
+
+/*
+* function  : startMenu
+* purpose   : function that allows the user to choose the source of the board
+* input     : void
+* output    : user choice
+*/
 
 int startMenu() {
     short int choice = 1;
@@ -73,6 +94,13 @@ int startMenu() {
 
     return choice;
 }
+
+/*
+* function  : startMenu
+* purpose   : function that allows the user to choose the difficulty leve of the game
+* input     : void
+* output    : number of exposed fields on the board
+*/
 
 int levelMenu() {
     short int choice = 0;
