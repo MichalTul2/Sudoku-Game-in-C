@@ -1,0 +1,33 @@
+{
+  "name": "Sudoku",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@emotion/babel-preset-css-prop": "^10.0.27",
+    "@emotion/core": "^10.0.27",
+    "@svgr/parcel-plugin-svgr": "^4.3.3",
+    "node-sass": "^4.13.0",
+    "parcel-bundler": "^1.12.4",
+    "react": "^16.12.0",
+    "react-css-modules": "^4.7.11",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2",
+    "react-svg-loader": "^3.0.3",
+    "sass-loader": "^8.0.0",
+    "styled-components": "^4.4.1"
+  },
+  "devDependencies": {
+    "parcel": "^1.12.4",
+    "prettier": "^1.19.1",
+    "sass": "^1.23.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "parcel src/index.html",
+    "dev:mock": "cros-env BOARD_MOCK=mock parcel src/index.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
