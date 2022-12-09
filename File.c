@@ -50,14 +50,24 @@ void loadGameFromFile (int ***array, int referenceBoard[][9], Game_Type *game){
 
     printf("SAVE SLOTS:\n");
     for (int i = 1; i <= fileSize; i++){
-            fread(game, sizeof(Game_Type), 1, binaryFile);
-            printf("%d  ", i); printHeader(game);
+        if (fread(game, sizeof(Game_Type), 1, binaryFile) <1){
+            perror("Error while reading a binary file");
+            exit(1);
+        }
+        printf("%d  ", i); printHeader(game);
     }
     printf("Which one do you choose? ");
     scanf("%d", &saveChoose);
     saveChoose--;
-    fseek(file, 16*saveChoose, SEEK_SET);
-    fseek(binaryFile,sizeof(Game_Type)*saveChoose, SEEK_SET);
+    if (fseek(file, 16*saveChoose, SEEK_SET) != 0){
+        perror("Error fseek encounter problems");
+        exit(1);
+    }
+    }
+    if(fseek(binaryFile,sizeof(Game_Type)*saveChoose, SEEK_SET) != 0){
+        perror("Error fseek encounter problems");
+        exit(1);
+    }
 
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
